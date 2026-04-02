@@ -12,104 +12,334 @@
     <title>Feed Professor</title>
 </head>
 <body>
-    <header class="topbar">
-        <div class="top-title">
-            <h1 class="connecta">Connecta</h1>
-            <input id="searchPosts" type="search" placeholder="Pesquisar" aria-label="Pesquisar posts" />
+    <!-- Header -->
+    <header class="topbar sticky-top">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="topbar-brand d-flex align-items-center gap-3">
+                    <a href="#" class="d-flex align-items-center gap-2" aria-label="Logo Connecta">
+                        <img src="../Imagens/Logo connecta.png" alt="Logo Connecta" style="height: 36px; width: auto;" />
+                        <span class="connecta-logo mb-0" style="color: white; font-size: 1.5rem; font-weight: 700;">Connecta</span>
+                    </a>
+                </div>
+                <div class="search-container flex-grow-1 mx-4">
+                    <input id="searchPosts" class="form-control" type="search" placeholder="🔍 Pesquisar posts..." aria-label="Pesquisar posts" />
+                </div>
+                <div class="user-menu-toggle">
+                    <button class="btn btn-link text-white p-0" type="button" id="menuBtn">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
     <main class="layout">
-        <aside class="menu-lateral">
+        <!-- Menu Lateral -->
+        <aside class="menu-lateral" id="sideMenu">
             <nav class="navbar-nav flex-column">
-                <a href="#home" class="nav-link menu-item active">
-                    <i class="bi bi-house-door"></i>
+                <a href="#home" class="nav-link menu-item active" data-section="home">
+                    <i class="bi bi-house-door-fill"></i>
                     <span>Home</span>
                 </a>
-                <a href="#perfil" class="nav-link menu-item">
+                <a href="#perfil" class="nav-link menu-item" data-section="perfil">
                     <i class="bi bi-person-circle"></i>
                     <span>Perfil</span>
                 </a>
-                <a href="#disciplina" class="nav-link menu-item">
-                    <i class="bi bi-book"></i>
+                <a href="#disciplina" class="nav-link menu-item" data-section="disciplina">
+                    <i class="bi bi-book-half"></i>
                     <span>Disciplina</span>
                 </a>
-                <a href="#grupo" class="nav-link menu-item">
-                    <i class="bi bi-people"></i>
+                <a href="#grupo" class="nav-link menu-item" data-section="grupo">
+                    <i class="bi bi-people-fill"></i>
                     <span>Grupo de Alunos</span>
+                </a>
+
+                <hr class="my-3">
+
+                <!-- Seção de Configurações -->
+                <div class="menu-section">
+                    <h6 class="menu-title">Configurações</h6>
+                    <a href="#" class="nav-link menu-item" id="settingsBtn">
+                        <i class="bi bi-gear"></i>
+                        <span>Configurações</span>
+                    </a>
+                    <a href="#" class="nav-link menu-item">
+                        <i class="bi bi-question-circle"></i>
+                        <span>Ajuda</span>
+                    </a>
+                </div>
+
+                <hr class="my-3">
+
+                <!-- Logout -->
+                <a href="#" class="nav-link menu-item logout-btn" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Sair</span>
                 </a>
             </nav>
         </aside>
 
         <section class="feed-area">
-            <div class="post-box">
-                <h2>Publicar no Feed</h2>
-                <textarea id="postText" placeholder="Escreva algo para a turma..."></textarea>
-                <button id="postButton" class="btn">Postar</button>
+            <!-- Post Box -->
+            <div class="card post-box shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-pencil-square"></i> Publicar no Feed
+                    </h5>
+                    <div class="form-group">
+                        <textarea id="postText" class="form-control mb-3" placeholder="Escreva algo para a turma..." rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input id="imageInput" class="form-control mb-3" type="file" accept="image/*" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="postButton" class="btn btn-primary btn-post">
+                            <i class="bi bi-send"></i> Postar
+                        </button>
+                        <button type="reset" class="btn btn-secondary" id="clearBtn">
+                            <i class="bi bi-x-circle"></i> Limpar
+                        </button>
+                    </div>
+                </div>
             </div>
 
+            <!-- Posts Container -->
+            <h5 class="mt-4 mb-3">
+                <i class="bi bi-chat-dots"></i> Posts Recentes
+            </h5>
             <div id="postsContainer" class="posts-container" aria-live="polite"></div>
         </section>
     </main>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h1 class="modal-title fs-5" id="settingsModalLabel">
+                        <i class="bi bi-gear"></i> Configurações
+                    </h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-group">
+                        <h6 class="mb-3">Tema Visual</h6>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="theme" id="themeLight" value="light" checked>
+                            <label class="btn btn-outline-secondary" for="themeLight">
+                                <i class="bi bi-sun"></i> Claro
+                            </label>
+                            <input type="radio" class="btn-check" name="theme" id="themeDark" value="dark">
+                            <label class="btn btn-outline-secondary" for="themeDark">
+                                <i class="bi bi-moon"></i> Escuro
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="settings-group">
+                        <h6 class="mb-3">Notificações</h6>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="notifCheck" checked>
+                            <label class="form-check-label" for="notifCheck">
+                                Ativar notificações
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="settings-group">
+                        <h6 class="mb-3">Privacidade</h6>
+                        <select class="form-select">
+                            <option selected>Pública</option>
+                            <option>Apenas alunos</option>
+                            <option>Privada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        // Dados de posts
         const posts = [
-            { author: 'Paulo (Aluno)', text: 'Alguém pode compartilhar o material da aula anterior?', date: new Date().toLocaleString() },
             { author: 'Mariana (Professor)', text: 'Lembrete: atividade 2 até sexta-feira.', date: new Date().toLocaleString() }
         ];
 
         const postsContainer = document.getElementById('postsContainer');
         const postText = document.getElementById('postText');
+        const imageInput = document.getElementById('imageInput');
         const postButton = document.getElementById('postButton');
         const searchPosts = document.getElementById('searchPosts');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+
+        // Menu Mobile Toggle
+        menuBtn.addEventListener('click', () => {
+            sideMenu.classList.toggle('show');
+        });
+
+        // Fechar menu ao clicar em um item (mobile)
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth < 896) {
+                    sideMenu.classList.remove('show');
+                }
+            });
+        });
 
         // Menu lateral ativo
         const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                menuItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
+            item.addEventListener('click', function(e) {
+                if (!this.classList.contains('logout-btn')) {
+                    e.preventDefault();
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                }
             });
         });
 
+        // Settings Modal
+        settingsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+            settingsModal.show();
+        });
+
+        // Tema Toggle
+        const themeLight = document.getElementById('themeLight');
+        const themeDark = document.getElementById('themeDark');
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        // Carregar tema salvo
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        if (savedTheme === 'dark') {
+            themeDark.checked = true;
+        } else {
+            themeLight.checked = true;
+        }
+
+        // Event listeners para mudança de tema
+        themeLight.addEventListener('change', () => setTheme('light'));
+        themeDark.addEventListener('change', () => setTheme('dark'));
+
+        // Logout
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Tem certeza que deseja sair? É uma ação que não pode ser desfeita.')) {
+                // Limpar dados da sessão
+                sessionStorage.clear();
+                localStorage.removeItem('professorSession');
+                
+                // Redirecionar para página inicial
+                window.location.href = './login.html';
+            }
+        });
+
+        // Renderizar Posts
         function renderPosts(filter = '') {
             const query = filter.toLowerCase().trim();
             postsContainer.innerHTML = '';
-            const filtered = posts.filter(p => p.text.toLowerCase().includes(query) || p.author.toLowerCase().includes(query));
+            const filtered = posts.filter(p => 
+                (p.text && p.text.toLowerCase().includes(query)) || 
+                p.author.toLowerCase().includes(query)
+            );
+            
             if (filtered.length === 0) {
-                postsContainer.innerHTML = '<p class="empty">Nenhum post encontrado.</p>';
+                postsContainer.innerHTML = '<div class="alert alert-info text-center"><i class="bi bi-info-circle"></i> Nenhum post encontrado.</div>';
                 return;
             }
+            
             filtered.reverse().forEach(post => {
                 const card = document.createElement('article');
-                card.className = 'post-card';
+                card.className = 'card post-card shadow-sm';
                 card.innerHTML = `
-                    <div class="post-header">
-                        <strong>${post.author}</strong>
-                        <span>${post.date}</span>
+                    <div class="card-body">
+                        <div class="post-header">
+                            <h6 class="mb-1"><i class="bi bi-person-circle"></i> ${post.author}</h6>
+                            <small class="text-muted">${post.date}</small>
+                        </div>
+                        <p class="card-text mt-2">${post.text || ''}</p>
+                        ${post.image ? `<img class="post-image img-fluid rounded" src="${post.image}" alt="Imagem da postagem" />` : ''}
+                        <div class="post-actions mt-3">
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-hand-thumbs-up"></i> Curtir
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-chat"></i> Comentar
+                            </button>
+                        </div>
                     </div>
-                    <p>${post.text}</p>
                 `;
                 postsContainer.appendChild(card);
             });
         }
 
+        // Event: Postar
         postButton.addEventListener('click', () => {
             const text = postText.value.trim();
-            if (!text) {
-                alert('Digite uma mensagem antes de postar.');
+            const file = imageInput.files[0];
+
+            if (!text && !file) {
+                alert('Digite uma mensagem ou selecione uma imagem antes de postar.');
                 return;
             }
-            posts.push({ author: 'Você (Professor)', text, date: new Date().toLocaleString() });
-            postText.value = '';
-            renderPosts(searchPosts.value);
+
+            const addPost = (imageData = '') => {
+                posts.push({ 
+                    author: 'Você (Professor)', 
+                    text, 
+                    image: imageData, 
+                    date: new Date().toLocaleString() 
+                });
+                postText.value = '';
+                imageInput.value = '';
+                renderPosts(searchPosts.value);
+            };
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => addPost(event.target.result);
+                reader.readAsDataURL(file);
+            } else {
+                addPost();
+            }
         });
 
+        // Event: Limpar formulário
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            postText.value = '';
+            imageInput.value = '';
+        });
+
+        // Event: Pesquisar posts
         searchPosts.addEventListener('input', e => renderPosts(e.target.value));
 
+        // Renderizar posts iniciais
         renderPosts();
     </script>
 </body>

@@ -1,163 +1,607 @@
-    * { box-sizing: border-box; }
+/* ============================================
+   RESET E VARIÁVEIS GLOBAIS
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #4affba;
+    --primary-dark: #e6e9ec;
+    --primary-light: #e3f2fd;
+    --secondary-color: #ffffff;
+    --text-primary: #ffffff;
+    --text-secondary: #000000;
+    --border-color: #dee2e6;
+    --bg-light: #ffffff;
+    --bg-white: #ffffff;
+    --transition: all 0.3s ease;
+}
+
+/* Tema Escuro */
+body.dark {
+    --primary-color: #00ff6a;
+    --primary-dark: #ebebeb;
+    --primary-light: #bbdefb;
+    --secondary-color: #4caf50;
+    --text-primary: #ffffff;
+    --text-secondary: #b0bec5;
+    --border-color: #37474f;
+    --bg-light: #121212;
+    --bg-white: #1e1e1e;
+}
+
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f5f7;
-    color: #1f2530;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-primary);
+    line-height: 1.6;
 }
-.logo-jpg {
-    position: absolute;
-    top: 35px;
-    left: 12px;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-}
-.connecta {
-    position: relative;
-    left: 30px;
-}
+
+/* ============================================
+   TOPBAR / HEADER
+   ============================================ */
+
 .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: #0f76f5;
-    color: #fff;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
+
+.topbar-brand {
+    flex-shrink: 0;
+}
+
+.connecta-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    transition: var(--transition);
+}
+
+.connecta-logo:hover {
+    transform: scale(1.05);
+}
+
+.search-container {
+    max-width: 400px;
+}
+
+.search-container .form-control {
+    border-radius: 20px;
+    border: none;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.search-container .form-control:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    background: white;
+}
+
+.search-container .form-control::placeholder {
+    color: #000000;
+}
+
+.user-menu-toggle {
+    display: none;
+}
+
+.user-menu-toggle .btn {
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.user-menu-toggle .btn:hover {
+    opacity: 0.8;
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
 
 .layout {
     display: flex;
     min-height: calc(100vh - 72px);
 }
+
+/* ============================================
+   MENU LATERAL
+   ============================================ */
+
 .menu-lateral {
-    width: 200px;
-    background: #ffffff;
-    border-right: 1px solid #e2e7ee;
+    width: 250px;
+    background: var(--bg-white);
+    border-right: 1px solid var(--border-color);
     padding: 1.5rem 0;
+    overflow-y: auto;
+    transition: var(--transition);
 }
 
 .navbar-nav {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .menu-item {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: #212a37 !important;
-    padding: 0.8rem 1rem !important;
-    margin: 0.5rem 0;
-    border-radius: 7px;
+    color: var(--text-primary) !important;
+    padding: 0.85rem 1rem !important;
+    border-radius: 8px;
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     white-space: nowrap;
 }
 
 .menu-item i {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     flex-shrink: 0;
-    color: #0f76f5;
+    color: var(--primary-color);
+    transition: var(--transition);
 }
 
 .menu-item:hover {
-    background: rgba(15, 118, 245, 0.12);
-    color: #0f76f5 !important;
+    background: var(--primary-light);
+    color: var(--primary-color) !important;
     transform: translateX(4px);
 }
 
+.menu-item:hover i {
+    color: var(--primary-color);
+}
+
 .menu-item.active {
-    background: rgba(15, 118, 245, 0.2);
-    color: #0f76f5 !important;
+    background: var(--primary-light);
+    color: var(--primary-color) !important;
     font-weight: 700;
-    border-left: 4px solid #0f76f5;
+    border-left: 4px solid var(--primary-color);
     padding-left: calc(1rem - 4px) !important;
 }
-.clickable { font-weight: 700; }
-.busca { margin-top: 1rem; }
-.busca input {
-    width: 100%;
-    padding: 0.55rem;
-    border: 1px solid #b8c2cc;
-    border-radius: 7px;
+
+.menu-item.active i {
+    color: var(--primary-color);
 }
-.feed-area { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
-.post-box { background: #fff; border-radius: 10px; border: 1px solid #d4dde9; padding: 1rem; }
-.post-box h2 { margin: 0 0 0.75rem; }
-.post-box textarea {
-    width: 100%;
-    min-height: 100px;
-    margin-bottom: 0.75rem;
-    border: 1px solid #b8c2cc;
-    border-radius: 8px;
-    padding: 0.8rem;
-    resize: vertical;
-    background: #fcfdff;
+
+/* Itens especiais do menu */
+.menu-section {
+    padding: 0.5rem 0;
 }
-.btn {
-    border: 0;
-    border-radius: 7px;
-    padding: 0.55rem 1rem;
-    cursor: pointer;
-    background: #e6ecf5;
-    color: #212a37;
+
+.menu-title {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
 }
-.btn:hover { opacity: 0.95; }
-.btn.accent { background: #0f76f5; color: #fff; }
-button.close { font-size: 1.2rem; line-height: 1; background: transparent; color: #777; }
-.posts-container { display: flex; flex-direction: column; gap: 0.8rem; }
+
+.menu-lateral hr {
+    margin: 1rem 0;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.logout-btn {
+    color: #dc3545 !important;
+    margin-top: auto;
+}
+
+.logout-btn i {
+    color: #dc3545;
+}
+
+.logout-btn:hover {
+    background: rgba(220, 52, 69, 0.1);
+    color: #c82333 !important;
+}
+
+.logout-btn:hover i {
+    color: #c82333;
+}
+
+/* ============================================
+   FEED AREA
+   ============================================ */
+
+.feed-area {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    background: var(--bg-light);
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Post Box (Publicar) */
+.post-box {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.post-box:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.post-box .card-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.post-box .form-control,
+.post-box textarea {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.post-box textarea {
+    resize: vertical;
+    min-height: 100px;
+    background: var(--bg-white);
+}
+
+.post-box .form-control:focus,
+.post-box textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(15, 118, 245, 0.15);
+}
+
+.btn-post {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 118, 245, 0.3);
+    color: white;
+}
+
+/* Posts Container */
+.posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .post-card {
-    background: #fff;
-    border: 1px solid #d4dde9;
-    border-radius: 10px;
-    padding: 0.85rem;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: var(--transition);
+    cursor: pointer;
 }
+
+.post-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
 .post-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.4rem;
-    font-size: 0.9rem;
-    color: #4b5570;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
 }
-.empty { text-align: center; color: #7c8395; }
-.modal {
-    position: fixed;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    background: rgba(5, 10, 18, 0.45);
-    z-index: 20;
+
+.post-header h6 {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
 }
-.modal.hidden { display: none; }
-.modal-content {
-    width: min(740px, 95vw);
-    background: #fff;
-    border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid #d1dfe9;
+
+.post-header small {
+    white-space: nowrap;
+    font-size: 0.8rem;
 }
-body.dark .modal-content { background: #1e2738; border-color: #354760; }
-.modal-content header { display: flex; justify-content: space-between; align-items: center; }
-.chat-messages { max-height: 300px; overflow-y: auto; border: 1px solid #d8e0ea; border-radius: 8px; padding: 0.6rem; margin: 0.8rem 0; background: #f8fbff; }
-body.dark .chat-messages { background: #0f161f; border-color: #344863; }
-.chat-entry { margin-bottom: 0.4rem; padding: 0.45rem 0.65rem; border-radius: 7px; max-width: 85%; }
-.chat-entry.teacher { background: #dbe9ff; align-self: flex-end; }
-.chat-entry.student { background: #e8edf6; align-self: flex-start; }
-body.dark .chat-entry.teacher { background: #204a8b; color: #eef6ff; }
-body.dark .chat-entry.student { background: #2b3954; color: #e3ecff; }
-.chat-input { display: flex; gap: 0.5rem; }
-.chat-input input { flex: 1; padding: 0.6rem; border: 1px solid #b8c2cc; border-radius: 7px; }
-body.dark .chat-input input { background: #1f2a3c; border-color: #3c4f6c; color: #dfe6f3; }
+
+.post-image {
+    max-height: 400px;
+    object-fit: cover;
+    margin-top: 1rem;
+}
+
+.post-actions {
+    display: flex;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.post-actions .btn {
+    flex: 1;
+    font-size: 0.85rem;
+    transition: var(--transition);
+}
+
+.post-actions .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   MODAL - CONFIGURAÇÕES
+   ============================================ */
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border: none;
+}
+
+.modal-header .btn-close-white {
+    transition: var(--transition);
+}
+
+.modal-header .btn-close-white:hover {
+    opacity: 0.8;
+}
+
+.settings-group {
+    margin-bottom: 1.5rem;
+}
+
+.settings-group h6 {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.settings-group .form-select,
+.settings-group .form-check-input {
+    border-color: var(--border-color);
+    transition: var(--transition);
+}
+
+.settings-group .form-select:focus,
+.settings-group .form-check-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(15, 118, 245, 0.15);
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .feed-area {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .search-container {
+        max-width: 300px;
+    }
+}
+
 @media (max-width: 896px) {
-    .layout { flex-direction: column; }
-    .menu-lateral { width: 100%; }
+    /* Menu mobile */
+    .user-menu-toggle {
+        display: block;
+    }
+
+    .menu-lateral {
+        position: fixed;
+        left: -250px;
+        top: 72px;
+        width: 250px;
+        height: calc(100vh - 72px);
+        overflow-y: auto;
+        background: var(--bg-white);
+        border-right: 1px solid var(--border-color);
+        z-index: 99;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
+    }
+
+    .menu-lateral.show {
+        left: 0;
+    }
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .search-container {
+        max-width: none;
+        flex-grow: 1;
+    }
+
+    .search-container .form-control {
+        font-size: 0.85rem;
+    }
+
+    .topbar-brand .connecta-logo {
+        font-size: 1.25rem;
+    }
 }
 
-body.theme-blue { background: #eaf3ff; color: #0b2341; }
-body.theme-blue .topbar { background: #0d4fc2; }
-body.theme-blue .menu-lateral { background: #eff6ff; border-color: #cfe3ff; }
+@media (max-width: 576px) {
+    .topbar {
+        padding: 0.5rem;
+    }
 
+    .connecta-logo {
+        font-size: 1.1rem !important;
+    }
+
+    .search-container {
+        display: none;
+    }
+
+    .feed-area {
+        padding: 0.75rem;
+    }
+
+    .post-box .card-body {
+        padding: 1rem;
+    }
+
+    .post-card .card-body {
+        padding: 1rem;
+    }
+
+    .post-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .post-actions {
+        flex-direction: column;
+    }
+
+    .post-actions .btn {
+        width: 100%;
+    }
+
+    .menu-item {
+        padding: 0.75rem 0.75rem !important;
+        font-size: 0.9rem;
+    }
+
+    .menu-item span {
+        display: none;
+    }
+
+    .menu-item i {
+        font-size: 1.4rem;
+    }
+
+    .menu-title {
+        display: none;
+    }
+
+    .modal-dialog {
+        margin: 1rem;
+    }
+}
+
+/* ============================================
+   MODO ESCURO (Opcional)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-primary: #e3ecff;
+        --text-secondary: #b8c2cc;
+        --border-color: #354760;
+        --bg-light: #0f161f;
+        --bg-white: #1e2738;
+    }
+
+    body {
+        background: var(--bg-light);
+        color: var(--text-primary);
+    }
+
+    .topbar {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .menu-lateral {
+        background: var(--bg-white);
+        border-right-color: var(--border-color);
+    }
+
+    .post-box,
+    .post-card {
+        background: var(--bg-white);
+    }
+
+    .post-box textarea,
+    .post-box .form-control {
+        background: #000000;
+        color: white;
+    }
+
+    .search-container .form-control {
+        background: rgba(248, 248, 248, 0.15);
+        color: var(--text-primary);
+    }
+
+    .search-container .form-control::placeholder {
+        color: #000000;
+    }
+
+    .modal-content {
+        background: var(--bg-white);
+        color: var(--text-primary);
+    }
+}
+
+/* Override de tema claro explícito (claro selecionado pelo usuário) */
+body:not(.dark) {
+    --primary-color: #4affba;
+    --primary-dark: #e6e9ec;
+    --primary-light: #e3f2fd;
+    --secondary-color: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #000000;
+    --border-color: #dee2e6;
+    --bg-light: #ffffff;
+    --bg-white: #ffffff;
+}
+
+body.dark {
+    --text-primary: #ffffff;
+    --text-secondary: #b0bec5;
+    --border-color: #37474f;
+    --bg-light: #121212;
+    --bg-white: #1e1e1e;
+}
+
+/* No modo claro, o texto do post deve ser escuro */
+body:not(.dark) .post-card .card-text {
+    color: #000000 !important;
+}
+
+/* Garantir textos brancos no modo escuro */
+body.dark .post-card .card-text,
+body.dark .post-card h6,
+body.dark .post-header small,
+body.dark .menu-item,
+body.dark .menu-title,
+body.dark .settings-group h6,
+body.dark .modal-content,
+body.dark .alert {
+    color: #ffffff !important;
+}
+
+/* No modo escuro, o texto digitado no textarea deve ser preto */
+body.dark .post-box .form-control,
+body.dark .post-box textarea {
+    color: #000000 !important;
+    background: #ffffff !important;
+}
+
+body.dark .post-box textarea::placeholder,
+body.dark .post-box .form-control::placeholder {
+    color: #666666 !important;
+}
