@@ -25,6 +25,10 @@
                 <div class="search-container flex-grow-1 mx-4">
                     <input id="searchPosts" class="form-control" type="search" placeholder="🔍 Pesquisar posts..." aria-label="Pesquisar posts" />
                 </div>
+                <div class="professor-info d-flex align-items-center gap-2 me-3">
+                    <span id="professorNome" class="text-white fw-bold"></span>
+                    <span id="professorDisciplina" class="text-white-50"></span>
+                </div>
                 <div class="user-menu-toggle">
                     <button class="btn btn-link text-white p-0" type="button" id="menuBtn">
                         <i class="bi bi-list"></i>
@@ -173,8 +177,9 @@
     
     <script>
         // Dados de posts
-        const posts = [
-            { author: 'Mariana (Professor)', text: 'Lembrete: atividade 2 até sexta-feira.', date: new Date().toLocaleString() }
+        // Carregar posts do localStorage ou usar padrão
+        let posts = JSON.parse(localStorage.getItem('posts')) || [
+            { author: 'Professor Silva (Matemática)', text: 'Lembrete: atividade 2 até sexta-feira.', date: new Date().toLocaleString(), comments: [] }
         ];
 
         const postsContainer = document.getElementById('postsContainer');
@@ -186,6 +191,14 @@
         const settingsBtn = document.getElementById('settingsBtn');
         const menuBtn = document.getElementById('menuBtn');
         const sideMenu = document.getElementById('sideMenu');
+        const professorNome = document.getElementById('professorNome');
+        const professorDisciplina = document.getElementById('professorDisciplina');
+
+        // Carregar dados do professor
+        const nome = localStorage.getItem('professorNome') || 'Professor';
+        const disciplina = localStorage.getItem('professorDisciplina') || 'Disciplina';
+        professorNome.textContent = nome;
+        professorDisciplina.textContent = `(${disciplina})`;
 
         // Menu Mobile Toggle
         menuBtn.addEventListener('click', () => {
@@ -274,9 +287,11 @@
                 return;
             }
             
-            filtered.reverse().forEach(post => {
+            filtered.reverse().forEach((post, reversedIndex) => {
+                const originalIndex = posts.indexOf(post);
                 const card = document.createElement('article');
                 card.className = 'card post-card shadow-sm';
+                const commentsHtml = post.comments.map(comment => `<div class="comment mb-2"><strong>${comment.author}:</strong> ${comment.text} <small class="text-muted">${comment.date}</small></div>`).join('');
                 card.innerHTML = `
                     <div class="card-body">
                         <div class="post-header">
@@ -285,17 +300,57 @@
                         </div>
                         <p class="card-text mt-2">${post.text || ''}</p>
                         ${post.image ? `<img class="post-image img-fluid rounded" src="${post.image}" alt="Imagem da postagem" />` : ''}
+                        <div class="comments mt-3">
+                            ${commentsHtml}
+                        </div>
                         <div class="post-actions mt-3">
-                            <button class="btn btn-sm btn-outline-primary">
+                            <button class="btn btn-sm btn-outline-primary like-btn" data-index="${originalIndex}">
                                 <i class="bi bi-hand-thumbs-up"></i> Curtir
                             </button>
-                            <button class="btn btn-sm btn-outline-secondary">
+                            <button class="btn btn-sm btn-outline-secondary comment-btn" data-index="${originalIndex}">
                                 <i class="bi bi-chat"></i> Comentar
                             </button>
+                            <button class="btn btn-sm btn-outline-info chat-btn" data-index="${originalIndex}">
+                                <i class="bi bi-chat-dots"></i> Chamar Professor
+                            </button>
+                        </div>
+                        <div class="comment-form mt-2" style="display: none;" data-index="${originalIndex}">
+                            <input type="text" class="form-control form-control-sm" placeholder="Digite seu comentário..." />
+                            <button class="btn btn-sm btn-primary mt-1 submit-comment">Enviar</button>
                         </div>
                     </div>
                 `;
                 postsContainer.appendChild(card);
+
+                // Add event listeners for this card
+                const commentBtn = card.querySelector('.comment-btn');
+                const commentForm = card.querySelector('.comment-form');
+                const submitComment = card.querySelector('.submit-comment');
+                const commentInput = card.querySelector('input');
+                const chatBtn = card.querySelector('.chat-btn');
+
+                commentBtn.addEventListener('click', () => {
+                    commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+                });
+
+                submitComment.addEventListener('click', () => {
+                    const commentText = commentInput.value.trim();
+                    if (commentText) {
+                        posts[originalIndex].comments.push({
+                            author: 'Você (Aluno)',
+                            text: commentText,
+                            date: new Date().toLocaleString()
+                        });
+                        localStorage.setItem('posts', JSON.stringify(posts));
+                        commentInput.value = '';
+                        commentForm.style.display = 'none';
+                        renderPosts(searchPosts.value);
+                    }
+                });
+
+                chatBtn.addEventListener('click', () => {
+                    alert('Chat com o professor: Em desenvolvimento. Por enquanto, envie um comentário.');
+                });
             });
         }
 
@@ -311,11 +366,13 @@
 
             const addPost = (imageData = '') => {
                 posts.push({ 
-                    author: 'Você (Professor)', 
+                    author: `${nome} (${disciplina})`, 
                     text, 
                     image: imageData, 
-                    date: new Date().toLocaleString() 
+                    date: new Date().toLocaleString(),
+                    comments: []
                 });
+                localStorage.setItem('posts', JSON.stringify(posts));
                 postText.value = '';
                 imageInput.value = '';
                 renderPosts(searchPosts.value);
