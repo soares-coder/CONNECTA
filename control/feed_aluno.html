@@ -7,9 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/feed_professor.css">
+    <link rel="stylesheet" href="../css/feed_aluno.css">
     <link rel="icon" type="image/x-icon" href="../Imagens/connecta.ico">
-    <title>Feed Professor</title>
+    <title>Feed Aluno</title>
 </head>
 <body>
     <!-- Header -->
@@ -89,22 +89,9 @@
             <div class="card post-box shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title mb-3">
-                        <i class="bi bi-pencil-square"></i> Publicar no Feed
+                        <i class="bi bi-eye"></i> Acesso de Leitura
                     </h5>
-                    <div class="form-group">
-                        <textarea id="postText" class="form-control mb-3" placeholder="Escreva algo para a turma..." rows="4"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <input id="imageInput" class="form-control mb-3" type="file" accept="image/*" />
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button id="postButton" class="btn btn-primary btn-post">
-                            <i class="bi bi-send"></i> Postar
-                        </button>
-                        <button type="reset" class="btn btn-secondary" id="clearBtn">
-                            <i class="bi bi-x-circle"></i> Limpar
-                        </button>
-                    </div>
+                    <p class="mb-0">Apenas o professor pode publicar no feed. Aqui você visualiza as postagens do professor em tempo real.</p>
                 </div>
             </div>
 
@@ -269,7 +256,7 @@
                 localStorage.removeItem('professorSession');
                 
                 // Redirecionar para página inicial
-                window.location.href = './login.html';
+                window.location.href = './login_professor.html';
             }
         });
 
@@ -354,55 +341,16 @@
             });
         }
 
-        // Event: Postar
-        postButton.addEventListener('click', () => {
-            const text = postText.value.trim();
-            const file = imageInput.files[0];
-
-            if (!text && !file) {
-                alert('Digite uma mensagem ou selecione uma imagem antes de postar.');
-                return;
-            }
-
-            const addPost = (imageData = '') => {
-                posts.push({ 
-                    author: `${nome} (${disciplina})`, 
-                    text, 
-                    image: imageData, 
-                    date: new Date().toLocaleString(),
-                    comments: []
-                });
-                localStorage.setItem('posts', JSON.stringify(posts));
-                postText.value = '';
-                imageInput.value = '';
-                renderPosts(searchPosts.value);
-            };
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => addPost(event.target.result);
-                reader.readAsDataURL(file);
-            } else {
-                addPost();
-            }
-        });
-
-        // Event: Limpar formulário
-        document.getElementById('clearBtn').addEventListener('click', () => {
-            postText.value = '';
-            imageInput.value = '';
-        });
-
-        // Event: Pesquisar posts
-        searchPosts.addEventListener('input', e => renderPosts(e.target.value));
-
-        // Sincronizar posts entre abas/janelas
+        // Evento: Atualizar posts em outras abas/janelas
         window.addEventListener('storage', (event) => {
             if (event.key === 'posts') {
                 posts = JSON.parse(event.newValue) || [];
                 renderPosts(searchPosts.value);
             }
         });
+
+        // Event: Pesquisar posts
+        searchPosts.addEventListener('input', e => renderPosts(e.target.value));
 
         // Renderizar posts iniciais
         renderPosts();
